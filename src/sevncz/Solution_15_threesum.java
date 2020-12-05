@@ -4,7 +4,7 @@ import java.util.*;
 
 class Solution_15_threesum {
     /**
-     * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+     * 给你一个包含 n 个整数的数组nums，判断nums中是否存在三个元素 a，b，c ，使得a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
      * <p>
      * 注意：答案中不可以包含重复的三元组。
      * <p>
@@ -27,7 +27,6 @@ class Solution_15_threesum {
             while (i > 0 && i<nums.length-2 && nums[i]==nums[i - 1]) {
                 i++;
             }
-
             int j = i + 1;
             int k = nums.length - 1;
             while (j < k) {
