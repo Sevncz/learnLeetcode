@@ -7,16 +7,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 多线程模拟百米赛跑
  */
 public class RunnerSport100WinnerThread {
-  private static int SPORT_MAN_COUNT = 10;
+  private static int SPORT_MAN_COUNT = 8;
   private static final Random random = new Random();
   private static final CountDownLatch readyLatch = new CountDownLatch(SPORT_MAN_COUNT);
-  private static AtomicInteger TOP = new AtomicInteger(0);
+  private static AtomicBoolean STOP = new AtomicBoolean(false);
   private static final Integer TOP_N = 3;
   private static CountDownLatch startLatch = new CountDownLatch(1);
   private static CountDownLatch endLatch = new CountDownLatch(TOP_N);
@@ -53,14 +54,12 @@ public class RunnerSport100WinnerThread {
             } catch (InterruptedException e) {
               e.printStackTrace();
             }
-            if(TOP.get() > TOP_N) {
+            if(STOP.get()) {
               break;
             }
             i++;
             sort.put(Thread.currentThread().getName(), i);
           }
-          TOP.incrementAndGet();
-          System.out.println(Thread.currentThread().getName() + ": END " + i);
           endLatch.countDown();
         }
       });
@@ -68,6 +67,7 @@ public class RunnerSport100WinnerThread {
     Thread.sleep(100);
     startLatch.countDown();
     endLatch.await();
+    STOP.set(true);
     sort.forEach((k,v) -> {
       System.out.println(k + "~:~" + v);
     });
